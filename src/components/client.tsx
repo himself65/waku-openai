@@ -1,3 +1,4 @@
+"use client"
 import { useFormState } from "react-dom"
 import { generateResponse } from '../actions/chat.js'
 

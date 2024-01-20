@@ -1,7 +1,11 @@
+'use server'
 import OpenAI from 'openai'
+import { getEnv } from 'waku'
+
+const apiKey = getEnv('OPENAI_API_KEY')!
 
 export const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!
+  apiKey
 })
 
 type ContentProps = {
@@ -14,7 +18,8 @@ const Content = async (props: ContentProps) => {
   if (content.value === undefined) {
     return null
   }
-  const value = JSON.parse(Buffer.from(content.value).toString('utf-8')).choices[0]?.delta?.content
+  const value = JSON.parse(
+    Buffer.from(content.value).toString('utf-8')).choices[0]?.delta?.content
   console.log('v', value)
   const done = content.done
   return (
@@ -30,7 +35,6 @@ const Content = async (props: ContentProps) => {
 }
 
 export async function generateResponse () {
-  "use server"
   const stream = await openai.chat.completions.create({
     messages: [
       {
